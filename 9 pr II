@@ -1,0 +1,38 @@
+using System;
+using System.Text;
+using System.IO;
+namespace MyProgram
+{
+    class Program
+    {
+        static void Main()
+        {
+            using (StreamReader fileInF = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/f.txt"))
+            {
+                using (StreamReader fileInG = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/g.txt"))
+                {
+                    using (StreamWriter fileOutH = new StreamWriter("C:/Users/Екатерина/source/repos/Any_name/h.txt", false))
+                    {
+                        string line_f = fileInF.ReadToEnd();
+                        string line_g = fileInG.ReadToEnd();
+                        char[] div = { ' ', '\n', '\t', '\r' };
+                        string[] numbers_f = line_f.Split(div, StringSplitOptions.RemoveEmptyEntries);
+                        string[] numbers_g = line_g.Split(div, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string num in numbers_f)
+                        {
+                            if (num[0] == '0' || num[0] == '-') continue;
+                            else fileOutH.Write("{0} ", num);
+                        }
+                        foreach (string num in numbers_g)
+                        {
+                            if (num[0] == '0') continue;
+                            if (num[0] == '-') fileOutH.Write("{0} ", num);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+//1 2 3 4 -9 -7 0 45 -27
+//1 -1 -2 -3 -10 5 7 15 23 -98
