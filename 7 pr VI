@@ -5,11 +5,11 @@ namespace ConsoleApp1
     class Program
     {
         // ступенчатый массив, тк изменяется кол-во столбцов
-        static void Print(int[][] a)
+        static void Print(int[][] a, int n, int m)
         {
-            for (int i = 0; i < a.Length; i++)
+            for (int j = 0; j < m; j++)
             {
-                for (int j = 0; j < a[i].Length; j++)
+                for (int i = 0; i < n; i++)
                 {
                     Console.Write("{0}\t", a[i][j]);
                 }
@@ -17,58 +17,51 @@ namespace ConsoleApp1
             }
 
         }
-        static void Input(out int[][] a)
+        static void Input(out int[][] a, out int n, out int m)
         {
             Random rnd = new Random();
             Console.Write("n = ");
-            int n = int.Parse(Console.ReadLine());
+            n = int.Parse(Console.ReadLine());
+            m = n;
             a = new int[n][];
-            for (int i = 0; i < a.Length; i++)
+            for (int i = 0; i < n; i++)
             {
                 a[i] = new int[n];
-                for (int j = 0; j < a[i].Length; j++)
+                for (int j = 0; j < n; j++)
                 {
                     a[i][j] = rnd.Next(-10, 10);
                 }
             }
         }
-        static void Delete(int[][] a, int jj)
+        static void Delete(int[][] a, ref int n, int k)
         {
-            for (int i = 0; i < a.Length; i++)
+            
+            for (int j = k; j < n - 1; j++)
             {
-                int[] mas = new int[a[i].Length - 1];
-                for (int j = 0; j < jj; j++)
-                {
-                    mas[j] = a[i][j];
-                }
-
-                for (int j = jj; j < a[i].Length - 1; j++)
-                {
-                    mas[j] = a[i][j + 1];
-                }
-                a[i] = mas;
+                a[j] = a[j + 1];
             }
+            --n;
 
         }
-        static void Find(int[][] a)
+        static void Find(int[][] a, ref int n, int m)
         {
-            for (int j = 0; j < a[0].Length; j++)
+            for (int i = 0; i < n; i++)
             {
-                if (a[0][j] > a[a.Length - 1][j]) { Delete(a, j); j--; };     
+                if (a[i][0] > a[i][m - 1]) { Delete(a, ref n, i); i--; };
             }
         }
-
-
 
         static void Main()
         {
+            int n, m;
             int[][] a;
-            Input(out a);
+            Input(out a, out n, out m);
             Console.WriteLine("Исходный массив:");
-            Print(a);
-            Find(a);
+            Print(a, n, m);
+            Find(a, ref n, m);
+            //Console.WriteLine("1");
             Console.WriteLine("Измененный массив:");
-            Print(a);
+            Print(a, n, m);
         }
     }
 
