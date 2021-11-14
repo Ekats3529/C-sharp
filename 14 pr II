@@ -1,0 +1,66 @@
+using System;
+using System.Text;
+using System.IO;
+namespace MyProgram
+{
+    struct Toy
+    {
+        public string name;
+        public int cost, dwn_age, up_age;
+        public Toy(string name, int cost, int dwn_age, int up_age)
+        {
+            this.name = name;
+            this.cost = cost;
+            this.dwn_age = dwn_age;
+            this.up_age = up_age;
+        }
+        public void Show()
+        {
+            Console.WriteLine("{0,15}: {1,5} rubles \t from {2,3} years to {3,3}", name, cost, dwn_age, up_age);
+        }
+
+        public string Str()
+        {
+            return String.Format("{0,15}: {1,5} rubles \t from {2,3} years to {3,3}", name, cost, dwn_age, up_age);
+        }
+    }
+    class Program
+    {
+
+        static public Toy[] Input()
+        {
+            using (StreamReader fileIn = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/f.txt"))
+            {
+                int n = int.Parse(fileIn.ReadLine());
+                Toy[] arr = new Toy[n];
+                for (int i = 0; i < n; i++)
+                {
+                    string[] text = fileIn.ReadLine().Split(' ');
+                    arr[i] = new Toy(text[0], int.Parse(text[1]), int.Parse(text[2]) , int.Parse(text[3]));
+                }
+                return arr;
+            }
+        }
+        static void Print(Toy[] array)
+        {
+            using (StreamWriter fileOut = new StreamWriter("C:/Users/Екатерина/source/repos/Any_name/out.txt", false))
+            {
+                foreach (Toy item in array)
+                {
+                    fileOut.WriteLine(item.Str());
+                }
+            }
+                
+        }
+
+ 
+        static void Main()
+        {
+            Toy[] array = Input();
+            Print(array);
+        }
+    }
+}
+
+
+
