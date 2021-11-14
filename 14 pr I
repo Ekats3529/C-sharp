@@ -1,0 +1,98 @@
+using System;
+using System.Text;
+using System.IO;
+namespace MyProgram
+{
+    struct SPoint
+    {
+        public int x, y;
+        public SPoint(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        public void Show()
+        {
+            Console.WriteLine("({0}, {1})", x, y);
+        }
+        public double Distance()
+
+        {
+            return Math.Sqrt(x * x + y * y);
+        }
+
+        public double Distance_Between(SPoint b)
+        {
+            return Math.Sqrt((this.x - b.x) * (this.x - b.x) + (this.y - b.y) * (this.y - b.y));
+        }
+    }
+    class Program
+    {
+
+        static public SPoint[] Input() 
+        {
+            using (StreamReader fileIn = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/f.txt")) 
+            {
+                int n = int.Parse(fileIn.ReadLine());
+                SPoint[] arr = new SPoint[n]; 
+                for (int i = 0; i < n; i++)
+                {
+                    string[] text = fileIn.ReadLine().Split(' ');
+                    arr[i] = new SPoint(int.Parse(text[0]), int.Parse(text[1])); 
+                }
+                return arr; 
+            }
+        }
+        static void Print(SPoint[] array) 
+        {
+            foreach (SPoint item in array)
+            {
+                item.Show(); 
+            }
+        }
+
+        static void Nearest_To_Each_Other_Points(SPoint[] array)
+        {
+            double dist = array[0].Distance_Between(array[1]);
+            SPoint a = array[0];
+            SPoint b = array[1];
+            for (int i = 1; i < array.Length; i++)
+            {
+                for (int j = i + 1; j < array.Length; j++)
+                {
+                    if (array[i].Distance_Between(array[j]) < dist) { 
+                        dist = array[i].Distance_Between(array[j]);
+                        a = array[i];
+                        b = array[j];
+                    }
+                }    
+            }
+            Console.WriteLine("Nearest to each other points: ");
+            a.Show();
+            b.Show();
+            Console.WriteLine("Distance between them: {0}", dist);
+        }
+
+        static void Main()
+        {
+            SPoint[] array = Input();
+            Nearest_To_Each_Other_Points(array);
+        }
+    }
+}
+
+
+
+Файл f:
+
+10
+1 1
+0 0
+5 6
+5 0
+3 7
+-9 -1
+-10 5
+3 -3
+1 -6
+0 2
