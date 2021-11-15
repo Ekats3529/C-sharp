@@ -3,7 +3,7 @@ using System.Text;
 using System.IO;
 namespace MyProgram
 {
-    struct Toy
+    struct Toy :IComparable <Toy>
     {
         public string name;
         public int cost, dwn_age, up_age;
@@ -22,6 +22,19 @@ namespace MyProgram
         public string Str()
         {
             return String.Format("{0,15}: {1,5} rubles \t from {2,3} years to {3,3}", name, cost, dwn_age, up_age);
+        }
+
+        public int CompareTo(Toy obj)
+        {
+            if (this.cost == obj.cost)
+            {
+                return 0;
+            }
+            else if (this.cost > obj.cost)
+            {
+                return 1;
+            }
+            return -1;
         }
     }
     class Program
@@ -49,8 +62,31 @@ namespace MyProgram
                 {
                     fileOut.WriteLine(item.Str());
                 }
+                fileOut.WriteLine();
             }
                 
+        }
+
+        static bool Correct(int n, int m, Toy obj)
+        {
+            //Console.WriteLine("{0} {1}", obj.dwn_age, obj.up_age);
+            if (obj.dwn_age >= n && obj.up_age >= m) {  return true; }
+            return false;
+        }
+
+        static void Find_n_Print(Toy[] array, int n, int m)
+        {
+            using (StreamWriter fileOut = new StreamWriter("C:/Users/Екатерина/source/repos/Any_name/out.txt", false))
+            {
+                foreach (Toy item in array)
+                {
+                    if (Correct(n, m, item))
+                    {
+                        fileOut.WriteLine(item.Str());
+                    }
+                }
+            }
+            
         }
 
  
@@ -58,9 +94,24 @@ namespace MyProgram
         {
             Toy[] array = Input();
             Print(array);
+            Array.Sort(array);
+            Console.WriteLine("Enter n and m");
+            int n = int.Parse(Console.ReadLine());
+            int m = int.Parse(Console.ReadLine());
+            Find_n_Print(array, n, m);
         }
     }
 }
 
 
-
+10
+Lego 10000 6 99
+Robot 6000 7 14
+Unicorn 3000 4 10
+Lego 12000 12 99
+Dollhouse 15000 4 15
+Doll 2300 3 13
+Helicopter 7100 8 18
+Teddy 1000 1 12
+Doll 3500 3 13
+Car 4300 3 15
