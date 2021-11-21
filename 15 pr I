@@ -1,0 +1,44 @@
+using System;
+using System.Linq;
+using System.Text;
+using System.IO;
+namespace Example
+{
+    class Program
+    {
+        static public int[] Input()
+        {
+            using (StreamReader fileIn = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/f.txt"))
+            {
+                string line = fileIn.ReadToEnd();
+                char[] div = { ' ', '\n', '\t', '\r' };
+                string[] arr = line.Split(div, StringSplitOptions.RemoveEmptyEntries);
+                int[] numbers = new int[arr.Length];
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    numbers[i] = int.Parse(arr[i]);
+                }
+                return numbers;
+            }
+        }
+        
+        static void Main()
+        {
+            int[] number = Input();
+            int x = int.Parse(Console.ReadLine());
+
+            var lowNums =
+                from n in number
+                where n <= x
+                select n * 2;
+
+            using (StreamWriter fileOut = new StreamWriter("C:/Users/Екатерина/source/repos/Any_name/out.txt", false))
+            {
+                foreach (var k in lowNums)
+                {
+                    fileOut.Write("{0} ", k);
+                }
+            }
+        }
+    }
+}
