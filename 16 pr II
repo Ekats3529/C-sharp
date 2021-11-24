@@ -63,7 +63,7 @@ namespace MyProgram
             Console.Write("Enter the year - ");
             int x = int.Parse(Console.ReadLine());
 
-            var cars = array.Where(k => k.year < x).OrderBy(k => k.mileage).Select(k => k);
+            var cars = array.Where(k => k.year < x).OrderBy(k => k.mileage);
 
             using (StreamWriter fileOut = new StreamWriter("C:/Users/Екатерина/source/repos/Any_name/output.txt", false))
             {
