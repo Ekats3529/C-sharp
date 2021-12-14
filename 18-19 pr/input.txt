@@ -1,0 +1,20 @@
+house 10000 Lego plastic 10
+1984 George_Orwell 300 KAPO 16
+bicycle 15000 Stels 10
+Volshebnik_Izumrudnogo_Goroda Alexander_Volkov 800 Fiction_library 6
+doll 2000 Barbie plastic 7
+ledyanka 1500 Winterland 4
+Zolushka Charles_Perrault 450 Kids_librery 5
+figure_skates 3500 Winterland 3
+soccer_ball 1500 Football_empire 6
+hockey_skates 3500 Winterland 5
+teddy_bear 1000 Stuffed_toys textile 3
+After_the_funeral Agatha_Christie 500 KAPO 16
+doll_house 8000 Barbie plastic 7
+basketball_ball 2000 Basketball_empire 8
+The_Adventures_of_Tom_Sawyer Mark_Twain 600 Fiction_library 6
+hockey_stick 5000 Winterland 5
+police_station 5000 Lego plastic 8
+Helicopter 7100 Fly_Easily plastic 10
+Evgeny_Onegin Alexander_Pushkin 450 Classical_library 14
+piano 20000 Lego plastic 18
