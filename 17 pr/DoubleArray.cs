@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -17,9 +17,24 @@ namespace Any_name
             }
         }
 
-        public DoubleArray(double [][] array)
+        public DoubleArray(double[][] array)
         {
-            this.array = array;
+            this.array = new double[array.Length][];
+            for (int i = 0; i < array.Length; i++)
+            {
+                this.array[i] = new double[array[i].Length];
+                Array.Copy(array[i], this.array[i], array[i].Length);
+            }
+        }
+
+        public DoubleArray(DoubleArray array)
+        {
+            this.array = new double[array.Length][];
+            for (int i = 0; i < array.Length; i++)
+            {
+                this.array[i] = new double[array[i].Length];
+                Array.Copy(array[i], this.array[i], array[i].Length);
+            }
         }
 
         public void Print()
@@ -66,6 +81,7 @@ namespace Any_name
                 return this.array.Length;
             }
         }
+
         public int Count
         {
             get
@@ -97,19 +113,36 @@ namespace Any_name
         {
             get
             {
-                return this.array[i][j];
+                if (0 <= i && i < this.array.Length && 0 <= j && j < (this.array[i]).Length)
+                {
+                    return this.array[i][j];
+                }
+                else
+                {
+                    Console.WriteLine("Недопустимые значения индексов");
+                    return 0;
+                }
+                
             }
             set
             {
-                this.array[i][j] = value;
+                if ((0 <= i && i < this.array.Length) && (0 <= j && j < (this.array[i]).Length))
+                {
+                    this.array[i][j] = value;
+                }
+                else
+                {
+                    Console.WriteLine("Недопустимые значения индексов");
+                }
+                
             }
         }
 
-        public int this[int i] // возвращает длину строки i
+        public double[] this[int i] // возвращает длину строки i
         {
             get
             {
-                return (this.array[i]).Length;
+                return this.array[i];
             }
         }
 
@@ -121,7 +154,7 @@ namespace Any_name
             DoubleArray temp = new DoubleArray(a);
             for (int i = 0; i < a.Length; i++)
             {
-                for (int j = 0; j < a[i]; j++)
+                for (int j = 0; j < a[i].Length; j++)
                 {
                     temp[i, j] = a[i, j] + 1;
                 }
@@ -134,7 +167,7 @@ namespace Any_name
             DoubleArray temp = new DoubleArray(a);
             for (int i = 0; i < a.Length; i++)
             {
-                for (int j = 0; j < a[i]; j++)
+                for (int j = 0; j < a[i].Length; j++)
                 {
                     temp[i, j] = a[i, j] - 1;
                 }
@@ -146,7 +179,7 @@ namespace Any_name
         {
             for (int i = 0; i < a.Length; i++)
             {
-                for (int j = 0; j < a[i] - 1; j++)
+                for (int j = 0; j < a[i].Length - 1; j++)
                 {
                     if (a[i, j + 1] < a[i, j]) { return true; }
                 }
@@ -158,7 +191,7 @@ namespace Any_name
         {
             for (int i = 0; i < a.Length; i++)
             {
-                for (int j = 0; j < a[i] - 1; j++)
+                for (int j = 0; j < a[i].Length - 1; j++)
                 {
                     if (a[i, j] <= a[i, j + 1]) { return false; }
                 }
@@ -177,7 +210,11 @@ namespace Any_name
             double[][] temp = new double[a.Length][];
             for (int i = 0; i < a.Length; i++)
             {
-                temp[i] = new double[a[i]];
+                temp[i] = new double[a[i].Length];
+                for (int j = 0; j < a[i].Length; j++)
+                {
+                    temp[i][j] = a[i, j];
+                }
             }
             return temp;
         }
@@ -189,4 +226,56 @@ namespace Any_name
 0.0 - 1.8 - 12.6 - 0.1 0.1
 1.0 2.5 5.7 - 3.7 - 6.3 - 0.15 1.17
 3.14
+*/
+
+
+/*int n;
+            int[] m;
+            using (StreamReader fileIn = new StreamReader("C:/Users/Екатерина/source/repos/Any_name/val.txt"))
+            {
+                n = int.Parse(fileIn.ReadLine());
+                string[] text = fileIn.ReadLine().Split();
+                m = new int[n];
+                for (int i = 0; i < n; i++)
+                {
+                    m[i] = int.Parse(text[i]);
+                }
+            }
+            DoubleArray arr = new DoubleArray(n, m);
+            arr.Print(); // empty
+
+            arr.Input(); // after input
+            arr.Print();
+
+            if (arr) { Console.WriteLine("Каждая строка не отсортирована по возрастанию"); }
+            else { Console.WriteLine("OK"); }
+
+            Console.WriteLine("Sorted"); 
+            arr.Sort();
+            arr.Print();
+
+            if (arr) { Console.WriteLine("Каждая строка не отсортирована по возрастанию"); }
+            else { Console.WriteLine("OK"); }
+
+            Console.WriteLine("count {0}", arr.Count);   //count of elements
+            Console.WriteLine("Enter the change");
+            arr.Add = double.Parse(Console.ReadLine());
+            arr.Print();  // after add
+
+            Console.WriteLine("element [0, 2] {0}", arr[0, 2]);
+
+            Console.WriteLine("element [2, 4] {0}", arr[2, 4]);
+            Console.WriteLine("Enter element [2, 4]");
+            arr[2, 4] = double.Parse(Console.ReadLine()); 
+            Console.WriteLine("new element [2, 4] {0}\n", arr[2, 4]);
+
+            arr.Print(); // after the changing of elements
+
+            Console.WriteLine("arr++\n");
+            arr++;
+            arr.Print();
+
+            Console.WriteLine("arr--\n");
+            arr--;
+            arr.Print(); 
 */
