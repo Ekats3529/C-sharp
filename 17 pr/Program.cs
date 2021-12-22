@@ -57,6 +57,32 @@ namespace Any_name
             Console.WriteLine("arr--\n");
             arr--;
             arr.Print(); 
+            double[][] mas1 = (double[][])arr;
+            double[][] mas2 = arr;
+            DoubleArray b1 = mas1;
+            DoubleArray b2 = (DoubleArray)mas2;
+
+            
+            mas1[0][1] = 1000;
+            mas2[0][1] = 2000;
+            b1[0, 1] = 100;
+            b2[0, 1] = 200;
+
+            Console.WriteLine("Maccив mas1: ");
+            Print(mas1);
+            arr.Print();
+
+            Console.WriteLine("Maccив mas2: ");
+            Print(mas2);
+            arr.Print();
+
+            Console.WriteLine("Maccив b1: ");
+            b1.Print();
+            arr.Print();
+
+            Console.WriteLine("Maccив b2: ");
+            b2.Print();
+            arr.Print();
 
 
 
