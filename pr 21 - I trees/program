@@ -1,0 +1,31 @@
+using System;
+using System.IO;
+
+
+namespace Trees
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BinaryTree tree = new BinaryTree();
+            using (StreamReader fileIn = new StreamReader("C:/Users/Екатерина/source/repos/Trees/Trees/input.txt"))
+            {
+                string line = fileIn.ReadToEnd();
+                string[] data = line.Split(' ');
+                foreach (string item in data)
+                {
+                    tree.Add(int.Parse(item));
+                }
+            }
+            tree.Inorder();
+            Console.WriteLine();
+
+            tree.Sheet();
+
+            tree.TheLargestSheet();
+
+
+        }
+    }
+}
