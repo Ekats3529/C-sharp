@@ -54,7 +54,7 @@ namespace Trees
                 }
             }
 
-            
+
 
 
             public static void Preorder(Node r) //прямой обход дерева
@@ -180,12 +180,55 @@ namespace Trees
                     }
                     TheLargestSheet(r.rigth);
 
-                }      
+                }
             }
 
+        
+        public static void HeigthTree(Node t, ref int count, ref int heigth)
+        {
+            if (t != null) // если текущий узел не пустой
+            {
+                if (count > heigth) //и длина пути от корня до текущего узла больше высоты дерева, то
+                {
+                    heigth = count; // полагаем в качестве высоты дерева длину пути до текущего узла
+                }
+                count++; // в любом случае увеличиваем длину пути от корня до текущего узла
+                HeigthTree(t.left, ref count, ref heigth); //обходим левое поддерево
+                HeigthTree(t.rigth, ref count, ref heigth); //обходим правое поддерево
+                count--; //после чего уменьшаем длину пути от корня до текущего узла
+            }
         }
 
-        Node tree; //ссылка на корень дерева
+
+        public static void SumOfEvenNodes(Node r, ref int count, int k, ref int sum) //симметричный обход дерева
+        {
+            if (r != null)
+            {
+                if (count == k)
+                    {
+                        //Console.WriteLine(r.inf)
+                            if ((int)r.inf % 2 == 0)
+                            {
+                                sum += (int)r.inf;
+                            }
+                       
+                    }
+                if (count < k)
+                    {
+                        count++;
+                        SumOfEvenNodes(r.left, ref count, k, ref sum);
+                        SumOfEvenNodes(r.rigth, ref count, k, ref sum);
+                        count--;
+                    }
+
+            }
+        }
+
+    }
+
+
+
+    Node tree; //ссылка на корень дерева
                    
         public object Inf
         {
@@ -241,7 +284,24 @@ namespace Trees
             Console.Write("The Largest Sheet ");
             Node.TheLargestSheet(tree);
         }
+    public int HeigthTree()
+    {
+        int count = 0;
+        int heigth = 0;
+        Node.HeigthTree(tree, ref count, ref heigth); //начинаем подсчет высоты с корня дерева
+        return heigth;
+    }
+
+        public int SumOfEvenNodes(int k)
+        {
+            int count = 1;
+            int sum = 0;
+            Node.SumOfEvenNodes(tree, ref count, k, ref sum); //начинаем подсчет высоты с корня дерева
+            return sum;
+        }
+
 
 
     }
 }
+
