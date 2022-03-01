@@ -21,9 +21,11 @@ namespace Trees
             tree.Inorder();
             Console.WriteLine();
 
-            tree.Sheet();
+            //Console.WriteLine(tree.HeigthTree());
 
-            tree.TheLargestSheet();
+            Console.Write("Enter the level k = ");
+            int k = int.Parse(Console.ReadLine());
+            Console.WriteLine(tree.SumOfEvenNodes(k));
 
 
         }
