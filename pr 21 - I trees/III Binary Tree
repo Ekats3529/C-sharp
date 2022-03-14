@@ -1,0 +1,368 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Trees
+{
+    public class BinaryTree
+    {
+        private class Node
+        {
+            public object inf;
+            public Node left;
+            public Node rigth;
+            public int height;
+            //конструктор вложенного класса, создает узел дерева
+            public Node(object nodeInf)
+            {
+                inf = nodeInf;
+                left = null;
+                rigth = null;
+                height = 0;
+
+            }
+            //добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
+            public static void Add(ref Node r, object nodeInf)
+            {
+                if (r == null)
+                {
+                    r = new Node(nodeInf);
+                }
+                else
+                {
+                    if (((IComparable)(r.inf)).CompareTo(nodeInf) > 0)
+                    {
+
+                        Add(ref r.left, nodeInf);
+                    }
+                    else
+                    {
+                        Add(ref r.rigth, nodeInf);
+                    }
+                    if (r.left != null && r.rigth != null)
+                    {
+                        r.height = Math.Max((r.left).height, (r.rigth).height) + 1;
+                    }
+                    else
+                    {
+                        if(r.left != null) { r.height = (r.left).height+ 1; }
+                        else { r.height = (r.rigth).height + 1; }
+                    }
+                    
+                }
+            }
+
+            public static void Sheet(Node t)
+            {
+                if (t != null) //если узел не пустой
+                {
+                    if (t.left == null && t.rigth == null)//но не имеет потомков, то он лист
+                    {
+                        Console.Write("{0} ", t.inf); //выводим на экран его значение
+                    }
+                    else //в противном случае
+                    {
+                        Sheet(t.left); //ищем листья в левом поддереве
+                        Sheet(t.rigth); //и в правом поддереве
+                    }
+                }
+            }
+
+
+
+
+            public static void Preorder(Node r) //прямой обход дерева
+            {
+                if (r != null)
+                {
+                    Console.Write("{0} ", r.inf);
+                    Preorder(r.left);
+                    Preorder(r.rigth);
+                }
+            }
+            public static void Inorder(Node r) //симметричный обход дерева
+            {
+                if (r != null)
+                {
+                    Inorder(r.left);
+                    Console.Write("{0} {1}\n", r.inf, r.height);
+                    Inorder(r.rigth);
+                }
+            }
+            public static void Postorder(Node r) //обратный обход дерева
+            {
+                if (r != null)
+                {
+                    Postorder(r.left);
+                    Postorder(r.rigth);
+                    Console.Write("{0} ", r.inf);
+                }
+            }
+            public static void Search(Node r, object key, out Node item)
+            {
+                if (r == null)
+                {
+                    item = null;
+                }
+                else
+                {
+                    if (((IComparable)(r.inf)).CompareTo(key) == 0)
+                    {
+                        item = r;
+                    }
+                    else
+                    {
+                        if (((IComparable)(r.inf)).CompareTo(key) > 0)
+                        {
+                            Search(r.left, key, out item);
+                        }
+                        else
+                        {
+                            Search(r.rigth, key, out item);
+                        }
+                    }
+                }
+            }
+
+            //методы Del и Delete позволяют удалить узел в дереве так, чтобы дерево при этом
+            //оставалось деревом бинарного поиска
+            private static void Del(Node t, ref Node tr)
+            {
+                if (tr.rigth != null)
+                {
+                    Del(t, ref tr.rigth);
+                }
+                else
+                {
+                    t.inf = tr.inf;
+                    tr = tr.left;
+                }
+            }
+            public static void Delete(ref Node t, object key)
+            {
+                if (t == null)
+                {
+                    throw new Exception("Данное значение в дереве отсутствует");
+                }
+                else
+                {
+                    if (((IComparable)(t.inf)).CompareTo(key) > 0)
+                    {
+                        Delete(ref t.left, key);
+                    }
+                    else
+                    {
+                        if (((IComparable)(t.inf)).CompareTo(key) < 0)
+                        {
+                            Delete(ref t.rigth, key);
+                        }
+                        else
+                        {
+                            if (t.left == null)
+                            {
+                                t = t.rigth;
+                            }
+                            else
+                            {
+                                if (t.rigth == null)
+                                {
+                                    t = t.left;
+                                }
+                                else
+                                {
+                                    Del(t, ref t.left);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            public static void TheLargestSheet(Node r) //симметричный обход дерева
+            {
+                if (r != null)
+                {
+                    if (r.left == null && r.rigth == null)
+                    {
+                        Console.Write("{0} ", r.inf);
+                    }
+                    else
+                    {
+                        if (r.rigth == null)
+                        {
+                            TheLargestSheet(r.left);
+                        }
+                    }
+                    TheLargestSheet(r.rigth);
+
+                }
+            }
+
+        
+        public static void HeigthTree(Node t, ref int count, ref int heigth)
+        {
+            if (t != null) // если текущий узел не пустой
+            {
+                if (count > heigth) //и длина пути от корня до текущего узла больше высоты дерева, то
+                {
+                    heigth = count; // полагаем в качестве высоты дерева длину пути до текущего узла
+                }
+                count++; // в любом случае увеличиваем длину пути от корня до текущего узла
+                HeigthTree(t.left, ref count, ref heigth); //обходим левое поддерево
+                HeigthTree(t.rigth, ref count, ref heigth); //обходим правое поддерево
+                count--; //после чего уменьшаем длину пути от корня до текущего узла
+            }
+        }
+
+
+        public static void SumOfEvenNodes(Node r, ref int count, int k, ref int sum) //симметричный обход дерева
+        {
+            if (r != null)
+            {
+                if (count == k)
+                    {
+                        //Console.WriteLine(r.inf)
+                            if ((int)r.inf % 2 == 0)
+                            {
+                                sum += (int)r.inf;
+                            }
+                       
+                    }
+                if (count < k)
+                    {
+                        count++;
+                        SumOfEvenNodes(r.left, ref count, k, ref sum);
+                        SumOfEvenNodes(r.rigth, ref count, k, ref sum);
+                        count--;
+                    }
+
+            }
+        }
+        
+        public static void IsBalanced(Node r, ref bool flag)
+            {
+                if (r != null && flag != false)
+                {
+                    if (r.left != null && r.rigth != null) {
+                        if (Math.Abs((r.left).height - (r.rigth).height) > 2)
+                        {
+                            flag = false;
+                        }
+                        IsBalanced(r.left, ref flag);
+                        IsBalanced(r.rigth, ref flag);
+                    }
+                    else if (r.left != null)
+                    {
+                        if ((r.left).height > 2)
+                        {
+                            flag = false;
+                        }
+                        IsBalanced(r.left, ref flag);
+                    }
+                    else if(r.rigth != null)
+                    {
+                        if ((r.rigth).height > 2)
+                        {
+                            flag = false;
+                        }
+                        IsBalanced(r.rigth, ref flag);
+                    }
+                    
+                }
+            }
+
+
+    }
+
+
+
+    Node tree; //ссылка на корень дерева
+                   
+        public object Inf
+        {
+            set { tree.inf = value; }
+            get { return tree.inf; }
+        }
+        public BinaryTree() //открытый конструктор
+        {
+            tree = null;
+        }
+        private BinaryTree(Node r) //закрытый конструктор
+        {
+            tree = r;
+        }
+        public void Add(object nodeInf) //добавление узла в дерево
+        {
+            Node.Add(ref tree, nodeInf);
+        }
+        public void Sheet()
+        {
+            Console.WriteLine("Sheets ");
+            Node.Sheet(tree);
+            Console.WriteLine();
+        }
+        //организация различных способов обхода дерева
+        public void Preorder()
+        {
+            Node.Preorder(tree);
+        }
+        public void Inorder()
+        {
+            Node.Inorder(tree);
+        }
+        public void Postorder()
+        {
+            Node.Postorder(tree);
+        }
+        public BinaryTree Search(object key)
+        {
+            Node r;
+            Node.Search(tree, key, out r);
+            BinaryTree t = new BinaryTree(r);
+            return t;
+        }
+        //удаление ключевого узла в дереве
+        public void Delete(object key)
+        {
+            Node.Delete(ref tree, key);
+        }
+
+        public void TheLargestSheet()
+        {
+            Console.Write("The Largest Sheet ");
+            Node.TheLargestSheet(tree);
+        }
+    public int HeigthTree()
+    {
+        int count = 0;
+        int heigth = 0;
+        Node.HeigthTree(tree, ref count, ref heigth); //начинаем подсчет высоты с корня дерева
+        return heigth;
+    }
+
+    public int SumOfEvenNodes(int k)
+    {
+        int count = 1;
+        int sum = 0;
+        Node.SumOfEvenNodes(tree, ref count, k, ref sum); //начинаем подсчет высоты с корня дерева
+        return sum;
+    }
+
+    public bool IsBalanced()
+    {
+        bool flag = true;
+        Node.IsBalanced(tree, ref flag);
+        return flag;
+    }
+
+
+    public bool CanBeBalanced()
+    {
+        bool flag = true;
+        Node.IsBalanced(tree, ref flag);
+        if (!flag) { Console.WriteLine("Невозможно сделать сбалансированным"); }
+        return flag;
+    }
+
+
+    }
+}
