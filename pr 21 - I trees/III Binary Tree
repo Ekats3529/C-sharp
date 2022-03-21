@@ -238,35 +238,75 @@ namespace Trees
             }
         }
         
-        public static void IsBalanced(Node r, ref bool flag)
+        public static void IsBalanced(Node r, ref int ans)
             {
-                if (r != null && flag != false)
+                if (r != null && ans != -1)
                 {
                     if (r.left != null && r.rigth != null) {
                         if (Math.Abs((r.left).height - (r.rigth).height) > 2)
                         {
-                            flag = false;
+                            ans = -1;
                         }
-                        IsBalanced(r.left, ref flag);
-                        IsBalanced(r.rigth, ref flag);
+                        else if (Math.Abs((r.left).height - (r.rigth).height) == 2)
+                        {
+                            ans = 0;
+                        }
+                        IsBalanced(r.left, ref ans);
+                        IsBalanced(r.rigth, ref ans);
                     }
                     else if (r.left != null)
                     {
                         if ((r.left).height > 2)
                         {
-                            flag = false;
+                            ans = -1;
                         }
-                        IsBalanced(r.left, ref flag);
+                        if ((r.left).height == 2)
+                        {
+                            ans = 0;
+                        }
+                        IsBalanced(r.left, ref ans);
                     }
                     else if(r.rigth != null)
                     {
                         if ((r.rigth).height > 2)
                         {
-                            flag = false;
+                            ans = -1;
                         }
-                        IsBalanced(r.rigth, ref flag);
+                        if ((r.rigth).height == 2)
+                        {
+                            ans = 0;
+                        }
+                        IsBalanced(r.rigth, ref ans);
                     }
                     
+                }
+            }
+            public static void InsertToBalance(Node r)
+            {
+                if (r != null)
+                {
+                    if (r.left != null && r.rigth != null)
+                    {
+                        if (Math.Abs((r.left).height - (r.rigth).height) == 2)
+                        {
+                            
+                        }
+                    }
+                    else if (r.left != null)
+                    {
+                        if ((r.left).height == 2)
+                        {
+                            
+                        }
+                    }
+                    else if (r.rigth != null)
+                    {
+                        if ((r.rigth).height == 2)
+                        {
+                            
+                        }
+                    }
+
                 }
             }
 
@@ -347,20 +387,26 @@ namespace Trees
         return sum;
     }
 
-    public bool IsBalanced()
+    public int IsBalanced()
     {
-        bool flag = true;
-        Node.IsBalanced(tree, ref flag);
-        return flag;
+            int ans = 1;
+        Node.IsBalanced(tree, ref ans);
+        return ans;
     }
 
 
-    public bool CanBeBalanced()
+    public int CanBeBalanced()
     {
-        bool flag = true;
-        Node.IsBalanced(tree, ref flag);
-        if (!flag) { Console.WriteLine("Невозможно сделать сбалансированным"); }
-        return flag;
+            int ans = 1;
+            Node.IsBalanced(tree, ref ans);
+
+        if (ans == -1) { Console.WriteLine("Невозможно сделать сбалансированным"); }
+        if (ans == 1) { Console.WriteLine("Уже сбалансированное"); }
+        if (ans == 0)
+            {
+
+            }
+            return ans;
     }
 
 
