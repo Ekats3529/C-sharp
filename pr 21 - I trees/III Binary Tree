@@ -45,10 +45,10 @@ namespace Trees
                     }
                     else
                     {
-                        if(r.left != null) { r.height = (r.left).height+ 1; }
+                        if (r.left != null) { r.height = (r.left).height + 1; }
                         else { r.height = (r.rigth).height + 1; }
                     }
-                    
+
                 }
             }
 
@@ -197,37 +197,37 @@ namespace Trees
                 }
             }
 
-        
-        public static void HeigthTree(Node t, ref int count, ref int heigth)
-        {
-            if (t != null) // если текущий узел не пустой
+
+            public static void HeigthTree(Node t, ref int count, ref int heigth)
             {
-                if (count > heigth) //и длина пути от корня до текущего узла больше высоты дерева, то
+                if (t != null) // если текущий узел не пустой
                 {
-                    heigth = count; // полагаем в качестве высоты дерева длину пути до текущего узла
+                    if (count > heigth) //и длина пути от корня до текущего узла больше высоты дерева, то
+                    {
+                        heigth = count; // полагаем в качестве высоты дерева длину пути до текущего узла
+                    }
+                    count++; // в любом случае увеличиваем длину пути от корня до текущего узла
+                    HeigthTree(t.left, ref count, ref heigth); //обходим левое поддерево
+                    HeigthTree(t.rigth, ref count, ref heigth); //обходим правое поддерево
+                    count--; //после чего уменьшаем длину пути от корня до текущего узла
                 }
-                count++; // в любом случае увеличиваем длину пути от корня до текущего узла
-                HeigthTree(t.left, ref count, ref heigth); //обходим левое поддерево
-                HeigthTree(t.rigth, ref count, ref heigth); //обходим правое поддерево
-                count--; //после чего уменьшаем длину пути от корня до текущего узла
             }
-        }
 
 
-        public static void SumOfEvenNodes(Node r, ref int count, int k, ref int sum) //симметричный обход дерева
-        {
-            if (r != null)
+            public static void SumOfEvenNodes(Node r, ref int count, int k, ref int sum) //симметричный обход дерева
             {
-                if (count == k)
+                if (r != null)
+                {
+                    if (count == k)
                     {
                         //Console.WriteLine(r.inf)
-                            if ((int)r.inf % 2 == 0)
-                            {
-                                sum += (int)r.inf;
-                            }
-                       
+                        if ((int)r.inf % 2 == 0)
+                        {
+                            sum += (int)r.inf;
+                        }
+
                     }
-                if (count < k)
+                    if (count < k)
                     {
                         count++;
                         SumOfEvenNodes(r.left, ref count, k, ref sum);
@@ -235,14 +235,15 @@ namespace Trees
                         count--;
                     }
 
+                }
             }
-        }
-        
-        public static void IsBalanced(Node r, ref int ans)
+
+            public static void IsBalanced(Node r, ref int ans)
             {
                 if (r != null && ans != -1)
                 {
-                    if (r.left != null && r.rigth != null) {
+                    if (r.left != null && r.rigth != null)
+                    {
                         if (Math.Abs((r.left).height - (r.rigth).height) > 2)
                         {
                             ans = -1;
@@ -266,7 +267,7 @@ namespace Trees
                         }
                         IsBalanced(r.left, ref ans);
                     }
-                    else if(r.rigth != null)
+                    else if (r.rigth != null)
                     {
                         if ((r.rigth).height > 2)
                         {
@@ -278,10 +279,12 @@ namespace Trees
                         }
                         IsBalanced(r.rigth, ref ans);
                     }
-                    
+
                 }
             }
-            public static void InsertToBalance(Node r)
+
+
+            public static void FindTheLowestNotBalanced(Node r, ref Node ans)
             {
                 if (r != null)
                 {
@@ -289,34 +292,75 @@ namespace Trees
                     {
                         if (Math.Abs((r.left).height - (r.rigth).height) == 2)
                         {
-                            
+                            if (ans == null)
+                            {
+                                ans = r;
+                            }
+                            else if (r.height <= ans.height)
+                            {
+                                ans = r;
+                            }
                         }
+                        FindTheLowestNotBalanced(r.left, ref ans);
+                        FindTheLowestNotBalanced(r.rigth, ref ans);
                     }
                     else if (r.left != null)
                     {
                         if ((r.left).height == 2)
                         {
-                            
+                            if (ans == null)
+                            {
+                                ans = r;
+                            }
+                            else if (r.height <= ans.height)
+                            {
+                                ans = r;
+                            }
                         }
+                        FindTheLowestNotBalanced(r.left, ref ans);
                     }
                     else if (r.rigth != null)
                     {
                         if ((r.rigth).height == 2)
                         {
-                            
+                            if (ans == null)
+                            {
+                                ans = r;
+                            }
+                            else if (r.height <= ans.height)
+                            {
+                                ans = r;
+                            }
                         }
+                        FindTheLowestNotBalanced(r.rigth, ref ans);
                     }
+                }
+            }
 
+            public static void InsertToBalance(Node r, Node key)
+            {
+                if (key.left != null && key.rigth != null)
+                {
+
+                }
+                else if (key.left == null)
+                {
+
+                }
+                else if (key.rigth == null)
+                {
+                    
                 }
             }
 
 
-    }
+
+        }
 
 
 
-    Node tree; //ссылка на корень дерева
-                   
+        Node tree; //ссылка на корень дерева
+
         public object Inf
         {
             set { tree.inf = value; }
@@ -371,43 +415,50 @@ namespace Trees
             Console.Write("The Largest Sheet ");
             Node.TheLargestSheet(tree);
         }
-    public int HeigthTree()
-    {
-        int count = 0;
-        int heigth = 0;
-        Node.HeigthTree(tree, ref count, ref heigth); //начинаем подсчет высоты с корня дерева
-        return heigth;
-    }
+        public int HeigthTree()
+        {
+            int count = 0;
+            int heigth = 0;
+            Node.HeigthTree(tree, ref count, ref heigth); //начинаем подсчет высоты с корня дерева
+            return heigth;
+        }
 
-    public int SumOfEvenNodes(int k)
-    {
-        int count = 1;
-        int sum = 0;
-        Node.SumOfEvenNodes(tree, ref count, k, ref sum); //начинаем подсчет высоты с корня дерева
-        return sum;
-    }
+        public int SumOfEvenNodes(int k)
+        {
+            int count = 1;
+            int sum = 0;
+            Node.SumOfEvenNodes(tree, ref count, k, ref sum); //начинаем подсчет высоты с корня дерева
+            return sum;
+        }
 
-    public int IsBalanced()
-    {
+        public int IsBalanced()
+        {
             int ans = 1;
-        Node.IsBalanced(tree, ref ans);
-        return ans;
-    }
+            Node.IsBalanced(tree, ref ans);
+            return ans;
+        }
+
+        public int FindTheLowestNotBalanced()
+        {
+            Node ans = null;
+            Node.FindTheLowestNotBalanced(tree, ref ans);
+            return (int)ans.inf;
+        }
 
 
-    public int CanBeBalanced()
-    {
+        public int CanBeBalanced()
+        {
             int ans = 1;
             Node.IsBalanced(tree, ref ans);
 
-        if (ans == -1) { Console.WriteLine("Невозможно сделать сбалансированным"); }
-        if (ans == 1) { Console.WriteLine("Уже сбалансированное"); }
-        if (ans == 0)
+            if (ans == -1) { Console.WriteLine("Невозможно сделать сбалансированным"); }
+            if (ans == 1) { Console.WriteLine("Уже сбалансированное"); }
+            if (ans == 0)
             {
 
             }
             return ans;
-    }
+        }
 
 
     }
