@@ -19,10 +19,10 @@ namespace Trees
                 }
             }
             tree.Inorder();
-            Console.WriteLine(tree.IsBalanced());
-            
+            Console.WriteLine(tree.CanBeBalanced());
+            Console.WriteLine(tree.FindTheLowestNotBalanced());
 
-            
+
 
 
         }
