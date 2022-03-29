@@ -1,0 +1,27 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Graphs
+{
+	class Program
+	{
+		static void Main()
+		{
+			Graph g = new Graph("C:/Users/Екатерина/source/repos/Graphs/Graphs/input.txt");
+
+			Console.WriteLine("Graph:");
+			g.Show();
+			Console.WriteLine();
+			Console.WriteLine("Введите вершины, соседство с которыми необходимо проверить ");
+			int v1 = int.Parse(Console.ReadLine());
+			int v2 = int.Parse(Console.ReadLine());
+			g.Neighbour(v1, v2);
+			
+		}
+	}
+
+}
