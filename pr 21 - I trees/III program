@@ -19,8 +19,7 @@ namespace Trees
                 }
             }
             tree.Inorder();
-            Console.WriteLine(tree.CanBeBalanced());
-            Console.WriteLine(tree.FindTheLowestNotBalanced());
+            tree.CanBeBalanced();
 
 
 
