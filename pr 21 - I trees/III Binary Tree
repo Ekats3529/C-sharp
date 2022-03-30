@@ -18,7 +18,7 @@ namespace Trees
                 inf = nodeInf;
                 left = null;
                 rigth = null;
-                height = 0;
+                height = 1;
 
             }
             //добавляет узел в дерево так, чтобы дерево оставалось деревом бинарного поиска
@@ -284,73 +284,109 @@ namespace Trees
             }
 
 
-            public static void FindTheLowestNotBalanced(Node r, ref Node ans)
+            public static void FindTheLowestNotBalanced(Node r, ref Stack<Node> nodes)
             {
                 if (r != null)
                 {
+                    FindTheLowestNotBalanced(r.left, ref nodes);
+                    FindTheLowestNotBalanced(r.rigth, ref nodes);
                     if (r.left != null && r.rigth != null)
                     {
                         if (Math.Abs((r.left).height - (r.rigth).height) == 2)
                         {
-                            if (ans == null)
-                            {
-                                ans = r;
-                            }
-                            else if (r.height <= ans.height)
-                            {
-                                ans = r;
-                            }
+                            nodes.Push(r);
                         }
-                        FindTheLowestNotBalanced(r.left, ref ans);
-                        FindTheLowestNotBalanced(r.rigth, ref ans);
+                        
                     }
                     else if (r.left != null)
                     {
                         if ((r.left).height == 2)
                         {
-                            if (ans == null)
-                            {
-                                ans = r;
-                            }
-                            else if (r.height <= ans.height)
-                            {
-                                ans = r;
-                            }
+                            nodes.Push(r);
                         }
-                        FindTheLowestNotBalanced(r.left, ref ans);
+                     
                     }
                     else if (r.rigth != null)
                     {
                         if ((r.rigth).height == 2)
                         {
-                            if (ans == null)
-                            {
-                                ans = r;
-                            }
-                            else if (r.height <= ans.height)
-                            {
-                                ans = r;
-                            }
+                            nodes.Push(r);
                         }
-                        FindTheLowestNotBalanced(r.rigth, ref ans);
                     }
                 }
             }
 
-            public static void InsertToBalance(Node r, Node key)
+
+            public static void GoToTheLowest(Node r, ref int lft, ref int rgt)
             {
-                if (key.left != null && key.rigth != null)
+                if (r != null)
                 {
+                    //Console.WriteLine("Несбалансированный {2} {0} {1}", lft, rgt, r.inf);
+                    if (r.left != null && r.rigth != null)
+                    {
+                        if ((r.left).height > (r.rigth).height)
+                        {
+                            lft = (int)r.inf;
+                            
+                            GoToTheLowest(r.rigth, ref lft, ref rgt);
+                        }
+                        else
+                        {
+                            rgt = (int)r.inf;
+                            GoToTheLowest(r.left, ref lft, ref rgt);
+                        }
+                    }
+                    else if (r.left != null)
+                    {
+                        lft = (int)r.inf;
+                        GoToTheLowest(r.rigth, ref lft, ref rgt);
 
+                    }
+                    else if (r.rigth != null)
+                    {
+                        rgt = (int)r.inf;
+                        GoToTheLowest(r.left, ref lft, ref rgt);
+                    }
                 }
-                else if (key.left == null)
-                {
+            }
 
-                }
-                else if (key.rigth == null)
+
+            public static void InsertToBalance(Node r, Node key, ref int lft, ref int rgt)
+            {
+                if (((IComparable)(r.inf)).CompareTo((int)key.inf) == 0)
                 {
-                    
+                    if (r.left != null && r.rigth != null)
+                    {
+                        int l1 = lft;
+                        int r1 = rgt;
+                        GoToTheLowest(r, ref l1, ref r1);
+                        lft = l1;
+                        rgt = r1;
+                    }
+                    else if (r.left != null)
+                    {
+                        lft = (int)r.inf;
+
+                    }
+                    else if (r.rigth != null)
+                    {
+                        rgt = (int)r.inf;
+                    }
                 }
+                else
+                {
+                    if (((IComparable)(r.inf)).CompareTo((int)key.inf) > 0)
+                    {
+                        rgt = (int)r.inf;
+                        InsertToBalance(r.left, key, ref lft, ref rgt);
+                    }
+                    else
+                    {
+                        lft = (int)r.inf;
+                        InsertToBalance(r.rigth, key, ref lft, ref rgt);
+                    }
+                }
+         
             }
 
 
@@ -438,15 +474,22 @@ namespace Trees
             return ans;
         }
 
-        public int FindTheLowestNotBalanced()
+
+        public int InsertToBalance()
         {
-            Node ans = null;
-            Node.FindTheLowestNotBalanced(tree, ref ans);
-            return (int)ans.inf;
+            int l = int.MinValue;
+            int r = int.MaxValue;
+            Stack<Node> nodes = new Stack<Node>();
+            Node.FindTheLowestNotBalanced(tree, ref nodes);
+            Node key = nodes.Peek();
+            Console.WriteLine("Несбалансированный {0}", key.inf);
+            Node.InsertToBalance(tree, key, ref l, ref r);
+            Random rnd = new Random();
+            return rnd.Next(l, r);
         }
 
 
-        public int CanBeBalanced()
+        public void CanBeBalanced()
         {
             int ans = 1;
             Node.IsBalanced(tree, ref ans);
@@ -455,9 +498,15 @@ namespace Trees
             if (ans == 1) { Console.WriteLine("Уже сбалансированное"); }
             if (ans == 0)
             {
-
+                int tmp = InsertToBalance();
+                Console.WriteLine("Попробуем вставить узел {0}", tmp);
+                Node.Add(ref tree, tmp);
+                Node.Inorder(tree);
+                ans = 1;
+                Node.IsBalanced(tree, ref ans);
+                if (ans == 1) { Console.WriteLine("Cбалансированное"); }
+                else { Console.WriteLine("Невозможно сделать сбалансированным за одну вставку"); }
             }
-            return ans;
         }
 
 
