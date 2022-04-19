@@ -296,7 +296,7 @@ namespace Trees
                         {
                             nodes.Push(r);
                         }
-                        
+
                     }
                     else if (r.left != null)
                     {
@@ -304,7 +304,7 @@ namespace Trees
                         {
                             nodes.Push(r);
                         }
-                     
+
                     }
                     else if (r.rigth != null)
                     {
@@ -327,7 +327,7 @@ namespace Trees
                         if ((r.left).height > (r.rigth).height)
                         {
                             lft = (int)r.inf;
-                            
+
                             GoToTheLowest(r.rigth, ref lft, ref rgt);
                         }
                         else
@@ -386,7 +386,7 @@ namespace Trees
                         InsertToBalance(r.rigth, key, ref lft, ref rgt);
                     }
                 }
-         
+
             }
 
 
@@ -505,7 +505,11 @@ namespace Trees
                 ans = 1;
                 Node.IsBalanced(tree, ref ans);
                 if (ans == 1) { Console.WriteLine("Cбалансированное"); }
-                else { Console.WriteLine("Невозможно сделать сбалансированным за одну вставку"); }
+                else { 
+                    Console.WriteLine("Невозможно сделать сбалансированным за одну вставку");
+                    Node.Delete(ref tree, tmp);
+                    Node.Inorder(tree);
+                }
             }
         }
 
