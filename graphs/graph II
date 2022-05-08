@@ -232,6 +232,7 @@ namespace Graphs
 			{
 				for (int i = 0; i < a.GetLength(0); i++)
 				{
+					
 					if (a[v, i] != 0)
 					{
 						a[v, i] = 0; a[i, v] = 0;
@@ -382,25 +383,30 @@ namespace Graphs
 			graph.SearchG(v - 1, ref a, ref c);
 
 			bool f = true;
+			bool f_eil = true;
 			for (int i = 0; i < graph.Size; i++)
 			{
+				int k = 0;
 				for (int j = 0; j < graph.Size; j++)
 				{
-					Console.Write("{0} ", a[i, j]);
-					if (a[i, j] != 0) { f = false;}
+					//Console.Write("{0} ", a[i, j]);
+					if (a[i, j] != 0) { f = false; }
+					if (graph[i, j] != 0) { k++; }
 				}
-				Console.WriteLine();
+				if (k % 2 != 0) { f_eil = false; }
+				//Console.WriteLine();
 			}
 
-			if (f)
+			if (f && f_eil)
 			{
-				Stack<int> temp = new Stack<int>();
+				
+				Queue<int> temp = new Queue<int>();
 				int top = c.Peek();
 				int bottom = c.Peek();
 				while (c.Count() != 0)
 				{
 					bottom = c.Pop();
-					temp.Push(bottom);
+					temp.Enqueue(bottom);
 				}
 				if (top != bottom)
 				{
@@ -410,7 +416,7 @@ namespace Graphs
 				{
 					while (temp.Count() != 0)
 					{
-						bottom = temp.Pop();
+						bottom = temp.Dequeue();
 						Console.Write("{0} ", bottom + 1);
 					}
 				}
