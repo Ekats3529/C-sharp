@@ -18,7 +18,8 @@ namespace Graphs
 			Console.WriteLine();
 			Console.WriteLine("Введите расстояние N");
 			int N = int.Parse(Console.ReadLine());
-			g.CancelRoad(N);
+			Console.WriteLine(g.CancelRoad(N));
+
 
 		}
 	}
