@@ -1,1 +1,290 @@
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Graphs
+{
+	public class Graph
+	{
+		private class Node  //вложенный класс для скрытия данных и алгоритмов
+		{
+			private double[,] array;   //матрица смежности
+			private string[] names;
+			private int[] x;
+			private int[] y;
+
+			public void Distance()
+			{
+				for (int i = 0; i < Size; i++)
+				{
+					for (int j = 0; j < Size; j++)
+					{
+						if (array[i, j] == 1)
+						{
+							array[i, j] =  Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
+							array[j, i] = array[i, j];
+						}
+					}
+				}	
+			}
+
+			public string City(int i)
+			{
+				return names[i];
+			}
+			public double this[int i, int j]   //индексатор для обращения к матрице смежности
+			{
+				get
+				{
+					return array[i, j];
+				}
+				set
+				{
+					array[i, j] = value;
+				}
+			}
+
+			public int Size //свойство для получения размерности матрицы смежности
+			{
+				get
+				{
+					return array.GetLength(0);
+				}
+			}
+
+			private bool[] nov; //вспомогательный массив: если i-ый элемент массива равен 
+								//true, то i-ая вершина еще не просмотрена; если i-ый 
+								//элемент  равен false, то i-ая вершина  просмотрена
+
+			public void NovSet()    //метод помечает все вершины графа как непросмотреные
+			{
+				for (int i = 0; i < Size; i++)
+				{
+					nov[i] = true;
+				}
+			}
+
+			//конструктор вложенного класса, инициализирует матрицу смежности и
+			// вспомогательный массив
+			public Node(string[] names, double[,] a, int[] x, int[] y)
+			{
+				this.names = names;
+				this.x = x;
+				this.y = y;
+				array = a;
+				nov = new bool[a.GetLength(0)];
+			}
+
+			
+
+
+			//реализация алгоритма Флойда
+			public double[,] Floyd(double [,] mas, out int[,] p)
+			{
+				int i, j, k;
+				//создаем массивы р и а
+				p = new int[Size, Size];
+				double[,] a = new double[Size, Size];
+				for (i = 0; i < Size; i++)
+				{
+					for (j = 0; j < Size; j++)
+					{
+						if (i == j)
+						{
+							a[i, j] = 0;
+						}
+						else
+						{
+							if (mas[i, j] == 0)
+							{
+								a[i, j] = int.MaxValue;
+							}
+							else
+							{
+								a[i, j] = mas[i, j];
+							}
+							p[i, j] = -1;
+						}
+
+					}
+				}
+
+				//осуществляем поиск кратчайших путей
+				for (k = 0; k < Size; k++)
+				{
+					for (i = 0; i < Size; i++)
+					{
+						for (j = 0; j < Size; j++)
+						{
+							double distance = a[i, k] + a[k, j];
+							if (a[i, j] > distance)
+							{
+								a[i, j] = distance;
+								p[i, j] = k;
+							}
+						}
+					}
+				}
+				return a;//в качестве результата возвращаем массив кратчайших путей между 
+			}
+
+			public void WayFloyd(int a, int b, int[,] p, ref Queue<int> items)
+			{
+				int k = p[a, b];
+				//если k<> -1, то путь состоит более чем из двух вершин а и b, и проходит  через  
+				//вершину k, поэтому
+				if (k != -1)
+				{
+					// рекурсивно восстанавливаем путь между вершинами а и k
+					WayFloyd(a, k, p, ref items);
+					items.Enqueue(k);   //помещаем вершину к в очередь
+										// рекурсивно восстанавливаем путь между вершинами  k и b
+					WayFloyd(k, b, p, ref items);
+				}
+			}
+			
+
+
+
+		}   //конец вложенного клаcса
+
+		private Node graph; //закрытое поле, реализующее АТД «граф»
+
+		public Graph(string name)   //конструктор внешнего  класса
+		{
+			using (StreamReader file = new StreamReader(name))
+			{
+				int n = int.Parse(file.ReadLine());
+				string[] names = new string[n];
+				int[] x = new int[n];
+				int[] y = new int[n];
+				double[,] a = new double[n, n];
+				for (int i = 0; i < n; i++)
+				{
+					string line = file.ReadLine();
+					string[] mas = line.Split(' ');
+					names[i] = mas[0];
+					x[i] = int.Parse(mas[1]);
+					y[i] = int.Parse(mas[2]);
+				}
+				for (int i = 0; i < n; i++)
+				{
+					string line = file.ReadLine();
+					string[] mas = line.Split(' ');
+					for (int j = 0; j < n; j++)
+					{
+						a[i, j] = double.Parse(mas[j]);
+					}
+				}
+				graph = new Node(names, a, x, y);
+				graph.Distance();
+			}
+		}
+
+		//метод выводит матрицу смежности на консольное окно
+		public void Show()
+		{
+			for (int i = 0; i < graph.Size; i++)
+			{
+				for (int j = 0; j < graph.Size; j++)
+				{
+					Console.Write("{0: 0.0000}", graph[i, j]);
+				}
+				Console.WriteLine();
+			}
+		}
+
+		public void Floyd(double [,] a)
+		{
+			int[,] p;
+			double[,] dist = graph.Floyd(a, out p); //запускаем алгоритм Флойда
+			int i, j;
+			//анализируем полученные данные и выводим их на экран
+			for (i = 0; i < graph.Size; i++)
+			{
+				for (j = 0; j < graph.Size; j++)
+				{
+					if (i != j)
+					{
+						if (dist[i, j] == int.MaxValue)
+						{
+							Console.WriteLine("Пути из вершины {0} в вершину {1} не существует", i, j);
+						}
+						else
+						{
+							Console.Write("Кратчайший путь  от вершины {0} до вершины {1} равен {2}, ", i, j, a[i, j]);
+							Console.Write(" путь ");
+							Queue<int> items = new Queue<int>();
+							items.Enqueue(i);
+							graph.WayFloyd(i, j, p, ref items);
+							items.Enqueue(j);
+							while (items.Count() != 0)
+							{
+								Console.Write("{0} ", items.Dequeue());
+							}
+							Console.WriteLine();
+						}
+					}
+				}
+			}
+		}
+
+		public bool CancelRoad(int N)
+		{
+			double[,] a = new double[graph.Size, graph.Size];
+			double[,] dist;
+			bool flag;
+			int[,] p = new int[graph.Size, graph.Size];
+			for (int i = 0; i < graph.Size; i++)
+			{
+				for (int j = 0; j < graph.Size; j++)
+				{
+					a[i, j] = graph[i, j];
+				}
+			}
+			Floyd(a);
+			for (int i = 0; i < graph.Size; i++)
+			{
+				for (int j = 0; j < graph.Size; j++)
+				{
+					if (graph[i, j] != 0)
+					{
+						a[i, j] = 0;
+						a[j, i] = 0;
+						dist = graph.Floyd(a, out p);
+						Console.WriteLine("cancel road between {0} {1}", graph.City(i), graph.City(j));
+						Floyd(a);
+						
+						
+						flag = true;
+						for (int k = 0; k < graph.Size; k++)
+						{
+							for (int h = 0; h < graph.Size; h++)
+							{
+								if (dist[k, h] > N) { flag = false; break; }
+							}
+							if (!flag) { break; }
+						}
+						if (flag) { 
+							Console.WriteLine("You can cancel road between {0} {1}", graph.City(i), graph.City(j));
+							return true; 
+						}
+						a[i, j] = graph[i, j];
+						a[j, i] = graph[j, i];
+
+
+					}
+				}
+			}
+			Console.WriteLine("Impossible");
+			return false;
+		}
+
+
+		
+	}
+}
