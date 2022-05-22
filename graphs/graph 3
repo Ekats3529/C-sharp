@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +24,11 @@ namespace Graphs
 					{
 						if (array[i, j] == 1)
 						{
-							array[i, j] =  Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
+							array[i, j] = Math.Sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
 							array[j, i] = array[i, j];
 						}
 					}
-				}	
+				}
 			}
 
 			public string City(int i)
@@ -79,11 +78,11 @@ namespace Graphs
 				nov = new bool[a.GetLength(0)];
 			}
 
-			
+
 
 
 			//реализация алгоритма Флойда
-			public double[,] Floyd(double [,] mas, out int[,] p)
+			public double[,] Floyd(double[,] mas, out int[,] p)
 			{
 				int i, j, k;
 				//создаем массивы р и а
@@ -101,7 +100,7 @@ namespace Graphs
 						{
 							if (mas[i, j] == 0)
 							{
-								a[i, j] = int.MaxValue;
+								a[i, j] = double.MaxValue;
 							}
 							else
 							{
@@ -146,7 +145,7 @@ namespace Graphs
 					WayFloyd(k, b, p, ref items);
 				}
 			}
-			
+
 
 
 
@@ -198,7 +197,7 @@ namespace Graphs
 			}
 		}
 
-		public void Floyd(double [,] a)
+		public void Floyd(double[,] a)
 		{
 			int[,] p;
 			double[,] dist = graph.Floyd(a, out p); //запускаем алгоритм Флойда
@@ -210,13 +209,13 @@ namespace Graphs
 				{
 					if (i != j)
 					{
-						if (dist[i, j] == int.MaxValue)
+						if (dist[i, j] == double.MaxValue)
 						{
 							Console.WriteLine("Пути из вершины {0} в вершину {1} не существует", i, j);
 						}
 						else
 						{
-							Console.Write("Кратчайший путь  от вершины {0} до вершины {1} равен {2}, ", i, j, a[i, j]);
+							Console.Write("Кратчайший путь  от вершины {0} до вершины {1} равен {2}, ", i, j, dist[i, j]);
 							Console.Write(" путь ");
 							Queue<int> items = new Queue<int>();
 							items.Enqueue(i);
@@ -246,7 +245,7 @@ namespace Graphs
 					a[i, j] = graph[i, j];
 				}
 			}
-			Floyd(a);
+			//Floyd(a);
 			for (int i = 0; i < graph.Size; i++)
 			{
 				for (int j = 0; j < graph.Size; j++)
@@ -256,10 +255,10 @@ namespace Graphs
 						a[i, j] = 0;
 						a[j, i] = 0;
 						dist = graph.Floyd(a, out p);
-						Console.WriteLine("cancel road between {0} {1}", graph.City(i), graph.City(j));
-						Floyd(a);
-						
-						
+						//Console.WriteLine("cancel road between {0} {1}", graph.City(i), graph.City(j));
+						//Floyd(a);
+
+
 						flag = true;
 						for (int k = 0; k < graph.Size; k++)
 						{
@@ -269,9 +268,10 @@ namespace Graphs
 							}
 							if (!flag) { break; }
 						}
-						if (flag) { 
+						if (flag)
+						{
 							Console.WriteLine("You can cancel road between {0} {1}", graph.City(i), graph.City(j));
-							return true; 
+							return true;
 						}
 						a[i, j] = graph[i, j];
 						a[j, i] = graph[j, i];
@@ -285,6 +285,6 @@ namespace Graphs
 		}
 
 
-		
+
 	}
 }
