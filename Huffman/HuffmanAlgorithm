@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace CodeHaffman
+{
+    class HuffmanAlgorithm
+    {
+        string line;
+        public Dictionary<char, int> alphabet = new Dictionary<char, int>(); //словарь символ-частота
+        public Dictionary<char, String> codingTable = new Dictionary<char, String>(); //словарь символ-код
+        public List<Node> nodes = new List<Node>(); // список узлов
+
+        public HuffmanAlgorithm() { }
+        public HuffmanAlgorithm(string line) { this.line = line; }
+
+        
+        public void CountFrequency()
+        {
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (!alphabet.ContainsKey(line[i]))
+                {
+                    alphabet.Add(line[i], 0);
+                }
+                alphabet[line[i]]++;
+            }
+            alphabet = alphabet.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        public void AddToList()
+        {
+            foreach (KeyValuePair<char, int> item in alphabet)
+            {
+                nodes.Add(new Node(item.Key, item.Value));
+            }
+        }
+
+
+        public void PrintAlphabet()
+        {
+            foreach (KeyValuePair<char, int> item in alphabet)
+            {
+                Console.WriteLine("Symbol = {0}, Freq = {1}", item.Key, item.Value);
+            }
+        }
+
+
+        public void BuildTree()
+        {
+            while (nodes.Count > 1)
+            {
+                nodes.Sort();
+                Node left = nodes[0];
+                Node right = nodes[1];
+                nodes.RemoveRange(0, 2);
+                
+                Node built = new Node(left, right);
+                nodes.Add(built);
+            }
+        }
+
+        public void BuildCodingTable(Node root, string code) //строим таблицу код - символ
+        {
+            //если идем налево, прибавляем к коду 0
+            if (root.GetLeft() != null)
+            {
+                BuildCodingTable(root.GetLeft(), code + '0');
+            }
+            //если идем направо, прибавляем к коду 1
+            if (root.GetRight() != null)
+            {
+                BuildCodingTable(root.GetRight(), code + '1');
+            }
+            //если дошли до символа, запоминаем
+            if (root.GetSymbol() != '\0')
+            {
+                codingTable.Add(root.GetSymbol(), code);
+                root.SetSymbol('\0');
+            }
+        }
+
+        public void PrintCodingTable()
+        {
+            foreach (KeyValuePair<char, String> item in codingTable)
+            {
+                Console.WriteLine("Symbol = {0}, Code = {1}", item.Key, item.Value);
+            }
+        }
+
+        
+
+
+
+
+    }
+}
