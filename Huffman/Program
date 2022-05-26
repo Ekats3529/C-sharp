@@ -1,0 +1,56 @@
+using System;
+using System.IO;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace CodeHaffman
+{
+    class Program
+    {
+        static void CodingFromFile(string filename)
+        {
+            string line;
+            using (StreamReader fileIn = new StreamReader(filename))
+            {
+                line = fileIn.ReadToEnd();
+            }
+            HuffmanAlgorithm coder = new HuffmanAlgorithm(line);
+            coder.CountFrequency();
+            coder.AddToList();
+            coder.PrintAlphabet();
+            coder.BuildTree();
+            string code = "";
+            coder.BuildCodingTable(coder.nodes[0], code);
+            Console.WriteLine();
+            coder.PrintCodingTable();
+        }
+
+
+        static void CodingFromConsole()
+        {
+            string line = Console.ReadLine();
+            HuffmanAlgorithm coder = new HuffmanAlgorithm(line);
+            coder.CountFrequency();
+            coder.AddToList();
+            coder.PrintAlphabet();
+            coder.BuildTree();
+            string code = "";
+            coder.BuildCodingTable(coder.nodes[0], code);
+            Console.WriteLine();
+            coder.PrintCodingTable();
+            string bincode = "";
+            for (int i = 0; i < line.Length; i++)
+            {
+                bincode += coder.codingTable[line[i]];
+            }
+            Console.WriteLine(bincode);
+        }
+
+        static void Main(string[] args)
+        {
+            //CodingFromFile("C:/Users/Екатерина/source/repos/CodeHaffman/CodeHaffman/input.txt");
+            CodingFromConsole();
+
+        }
+    }
+}
